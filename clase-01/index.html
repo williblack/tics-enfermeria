@@ -1,1 +1,730 @@
-hola!!
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo TIC's – Auxiliar en Enfermería | Politécnico San Mateo</title>
+    <style>
+        :root {
+            --primary: #0F4C81;
+            --secondary: #2E8B8B;
+            --accent: #5CB85C;
+            --background: #F7FAFC;
+            --text: #1F2937;
+            --soft-gray: #E5E7EB;
+            --white: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Presentation Wrapper */
+        .deck-container {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Slides */
+        .slide-stage {
+            flex-grow: 1;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 4rem;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--background);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            animation: slideIn 0.6s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Layout Types */
+        .content-width {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            color: var(--primary);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            border-bottom: 4px solid var(--accent);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Components */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--soft-gray);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .agenda-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .agenda-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: var(--white);
+            padding: 1.2rem;
+            border-radius: 8px;
+            border-left: 6px solid var(--primary);
+            font-weight: 500;
+            box-shadow: var(--shadow);
+        }
+
+        .agenda-number {
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .roadmap {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .roadmap-item {
+            padding: 0.8rem 1.5rem;
+            background: var(--white);
+            border: 1px solid var(--soft-gray);
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .roadmap-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .check-icon {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .prompt-box {
+            background: #2D3748;
+            color: #A0AEC0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            margin-top: 1rem;
+            border-left: 4px solid var(--accent);
+        }
+
+        .prompt-text {
+            color: #F7FAFC;
+        }
+
+        /* Navigation UI */
+        .controls {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .nav-btn:disabled {
+            background: var(--soft-gray);
+            cursor: not-allowed;
+            color: var(--text);
+        }
+
+        .progress-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .slide-count {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .progress-bar-container {
+            width: 150px;
+            height: 6px;
+            background: var(--soft-gray);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .fullscreen-btn {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--white);
+            border: 1px solid var(--soft-gray);
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0.7;
+        }
+
+        .fullscreen-btn:hover { opacity: 1; }
+
+        .meta-strip {
+            position: fixed;
+            top: 1.5rem;
+            left: 2rem;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .slide { padding: 2rem; }
+            .hero-title { font-size: 2rem; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .section-title { font-size: 1.8rem; }
+            .controls { width: 90%; justify-content: space-between; gap: 0.5rem; }
+            .progress-bar-container { width: 80px; }
+        }
+
+        /* Icons (SVG Inline) */
+        .icon { width: 24px; height: 24px; fill: currentColor; }
+    </style>
+</head>
+<body>
+
+    <div class="meta-strip">Politécnico San Mateo | Auxiliar en Enfermería</div>
+    <button class="fullscreen-btn" onclick="toggleFullScreen()" title="Pantalla Completa">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+    </button>
+
+    <div class="deck-container">
+        <div class="slide-stage" id="slide-stage">
+            
+            <!-- Slide 1: Portada -->
+            <section class="slide active" id="slide-1">
+                <div class="content-width">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <svg style="width: 80px; height: 80px; color: var(--accent);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </div>
+                    <h1 class="hero-title">Módulo TIC's – Auxiliar en Enfermería</h1>
+                    <h2 class="hero-subtitle">Clase 1: Inducción, diagnóstico digital y organización del trabajo</h2>
+                    <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+                        <p style="margin-bottom: 1rem; font-weight: 600; color: var(--primary);">Docente: William Bernal</p>
+                        <p style="font-size: 0.95rem; color: var(--text);">Horario: 7:00 a. m. – 4:00 p. m. | Frecuencia: cada 15 días</p>
+                        <hr style="margin: 1.5rem 0; opacity: 0.2;">
+                        <p style="font-style: italic;">"Primer encuentro para instalar el curso, conocer el grupo y empezar con una evidencia real."</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 2: Ruta de la jornada -->
+            <section class="slide" id="slide-2">
+                <div class="content-width">
+                    <h2 class="section-title">¿Qué haremos hoy?</h2>
+                    <div class="agenda-list">
+                        <div class="agenda-item"><span class="agenda-number">1</span> Presentación del módulo y encuadre pedagógico</div>
+                        <div class="agenda-item"><span class="agenda-number">2</span> Diagnóstico de competencias digitales</div>
+                        <div class="agenda-item"><span class="agenda-number">3</span> Organización del curso y acuerdos de trabajo</div>
+                        <div class="agenda-item"><span class="agenda-number">4</span> Uso inicial de IA como apoyo educativo</div>
+                        <div class="agenda-item"><span class="agenda-number">5</span> Primera práctica digital aplicada</div>
+                        <div class="agenda-item"><span class="agenda-number">6</span> Cierre y entrega de evidencia final</div>
+                    </div>
+                    <p style="margin-top: 2rem; color: var(--secondary); font-weight: bold; text-align: center;">Hoy no buscamos correr; buscamos comenzar bien.</p>
+                </div>
+            </section>
+
+            <!-- Slide 3: Sentido del módulo -->
+            <section class="slide" id="slide-3">
+                <div class="content-width">
+                    <h2 class="section-title">¿Por qué este módulo es importante?</h2>
+                    <div class="grid-2">
+                        <div class="card">
+                            <h3>📁 Organizar información</h3>
+                            <p>Gestión de archivos, carpetas y recursos esenciales de su proceso formativo.</p>
+                        </div>
+                        <div class="card">
+                            <h3>📊 Registrar datos</h3>
+                            <p>Uso de tablas y formatos técnicos para el contexto académico y de salud.</p>
+                        </div>
+                        <div class="card">
+                            <h3>✉️ Comunicar contenido</h3>
+                            <p>Elaboración de documentos y materiales visuales educativos en salud.</p>
+                        </div>
+                        <div class="card">
+                            <h3>☁️ Entorno Digital</h3>
+                            <p>Dominio de la nube, correo y herramientas de trabajo colaborativo.</p>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-top: 2rem; border-left: 5px solid var(--accent); background: #F0FFF4;">
+                        <strong>Nota fundamental:</strong> Las TIC no son un relleno. Son la base funcional para estudiar, organizarse y comunicarse profesionalmente.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 4: Metodología -->
+            <section class="slide" id="slide-4">
+                <div class="content-width">
+                    <h2 class="section-title">Así vamos a trabajar</h2>
+                    <div class="grid-2">
+                        <div class="agenda-list">
+                            <div class="agenda-item">Explicación breve y con sentido</div>
+                            <div class="agenda-item">Demostración guiada por el docente</div>
+                            <div class="agenda-item">Práctica activa del estudiante</div>
+                            <div class="agenda-item">Organización y guardado de la evidencia</div>
+                            <div class="agenda-item">Retroalimentación inmediata</div>
+                        </div>
+                        <div class="card">
+                            <h4 style="margin-bottom: 1rem; color: var(--primary);">Reglas de Oro:</h4>
+                            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.8rem;">
+                                <li>✅ Clases 70% prácticas</li>
+                                <li>✅ Trabajo basado en evidencias</li>
+                                <li>✅ Uso híbrido: Celular + PC</li>
+                                <li>✅ Comunicación vía WhatsApp</li>
+                                <li>✅ IA como copiloto, no reemplazo</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 5: Ruta General (8 clases) -->
+            <section class="slide" id="slide-5">
+                <div class="content-width">
+                    <h2 class="section-title">Recorrido del Módulo</h2>
+                    <div class="roadmap">
+                        <div class="roadmap-item active"><span>Clase 1</span> <strong>Inducción y diagnóstico digital</strong></div>
+                        <div class="roadmap-item"><span>Clase 2</span> <strong>Organización digital del trabajo</strong></div>
+                        <div class="roadmap-item"><span>Clase 3</span> <strong>Excel básico aplicado a salud</strong></div>
+                        <div class="roadmap-item"><span>Clase 4</span> <strong>Excel: Fórmulas y funciones básicas</strong></div>
+                        <div class="roadmap-item"><span>Clase 5</span> <strong>Word: Documentos técnicos del área</strong></div>
+                        <div class="roadmap-item"><span>Clase 6</span> <strong>Word: Informes formales y normas</strong></div>
+                        <div class="roadmap-item"><span>Clase 7</span> <strong>Diseño educativo digital (Canva)</strong></div>
+                        <div class="roadmap-item"><span>Clase 8</span> <strong>Proyecto integrador y cierre</strong></div>
+                    </div>
+                    <p style="margin-top: 1.5rem; font-size: 0.9rem; text-align: center; color: var(--secondary);">Vamos de lo básico a lo aplicado para construir una base real.</p>
+                </div>
+            </section>
+
+            <!-- Slide 6: Diagnóstico Inicial -->
+            <section class="slide" id="slide-6">
+                <div class="content-width">
+                    <h2 class="section-title">Punto de partida</h2>
+                    <p style="margin-bottom: 2rem; font-size: 1.2rem;">Antes de avanzar, reflexionemos sobre nuestras habilidades actuales:</p>
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="checklist-item">❓ ¿Qué tanto manejas el correo electrónico?</div>
+                            <div class="checklist-item">❓ ¿Sabes crear, guardar y ubicar archivos?</div>
+                            <div class="checklist-item">❓ ¿Has trabajado con Excel o Canva?</div>
+                        </div>
+                        <div class="card">
+                            <div class="checklist-item">❓ ¿Usas más el celular o el computador?</div>
+                            <div class="checklist-item">❓ ¿Tienes acceso constante a internet?</div>
+                            <div class="checklist-item">❓ ¿Qué esperas fortalecer en este módulo?</div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 2rem; text-align: center; color: var(--secondary); font-style: italic;">El diagnóstico no es una nota; es el mapa para orientar mi apoyo hacia ustedes.</p>
+                </div>
+            </section>
+
+            <!-- Slide 7: Actividad Diagnóstico -->
+            <section class="slide" id="slide-7">
+                <div class="content-width">
+                    <h2 class="section-title">Actividad 1: Diagnóstico Digital</h2>
+                    <div class="grid-2">
+                        <div class="card" style="border-top: 6px solid var(--accent);">
+                            <h3 style="color: var(--primary);">Instrucciones</h3>
+                            <ol style="margin-left: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem;">
+                                <li>Escanear el código QR o abrir el enlace compartido en WhatsApp.</li>
+                                <li>Responder con total sinceridad.</li>
+                                <li>Asegurarse de escribir correctamente su correo.</li>
+                                <li>Notificar al docente al terminar.</li>
+                            </ol>
+                        </div>
+                        <div class="card">
+                            <h3>Información a recoger:</h3>
+                            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem;">
+                                <li>🔹 Datos de contacto y perfil</li>
+                                <li>🔹 Acceso a tecnología y conectividad</li>
+                                <li>🔹 Nivel autopercibido en ofimática</li>
+                                <li>🔹 Expectativas y necesidades puntuales</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <div style="background: var(--soft-gray); display: inline-block; padding: 2rem; border-radius: 12px;">
+                            <span style="color: var(--gray);">[Espacio para Link o QR del Formulario]</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 8: Acuerdos de Organización -->
+            <section class="slide" id="slide-8">
+                <div class="content-width">
+                    <h2 class="section-title">Base operativa de trabajo</h2>
+                    <div class="grid-2">
+                        <div class="card">
+                            <h3>Checklist Inicial:</h3>
+                            <div class="checklist-item"><span class="check-icon">✓</span> Correo electrónico activo y accesible.</div>
+                            <div class="checklist-item"><span class="check-icon">✓</span> Pertenecer al grupo oficial de WhatsApp.</div>
+                            <div class="checklist-item"><span class="check-icon">✓</span> Creación de carpeta "TICs - Nombre Estudiante".</div>
+                            <div class="checklist-item"><span class="check-icon">✓</span> Nombramiento estándar de archivos.</div>
+                        </div>
+                        <div class="card">
+                            <h3>Ejemplos de Nombres:</h3>
+                            <div class="prompt-box" style="background: #edf2f7; color: #2d3748; border-left-color: var(--primary);">
+                                cl1_juan_perez.xlsx<br>
+                                tablaPacientes_ana_gomez.docx<br>
+                                evidencia_final_luis_rodriguez.pdf
+                            </div>
+                            <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--secondary);">El orden digital es la primera competencia que evaluaremos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 9: Herramientas -->
+            <section class="slide" id="slide-9">
+                <div class="content-width">
+                    <h2 class="section-title">Nuestro Ecosistema Digital</h2>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                        <div class="card" style="text-align: center; padding: 1.5rem;">
+                            <strong style="color: var(--primary);">Google Forms</strong>
+                            <p style="font-size: 0.8rem;">Recolección y diagnóstico</p>
+                        </div>
+                        <div class="card" style="text-align: center; padding: 1.5rem;">
+                            <strong style="color: var(--primary);">WhatsApp</strong>
+                            <p style="font-size: 0.8rem;">Comunicación y enlaces</p>
+                        </div>
+                        <div class="card" style="text-align: center; padding: 1.5rem;">
+                            <strong style="color: var(--primary);">Google Drive</strong>
+                            <p style="font-size: 0.8rem;">Respaldo y evidencias</p>
+                        </div>
+                        <div class="card" style="text-align: center; padding: 1.5rem;">
+                            <strong style="color: var(--primary);">Excel / Sheets</strong>
+                            <p style="font-size: 0.8rem;">Datos y tablas de salud</p>
+                        </div>
+                        <div class="card" style="text-align: center; padding: 1.5rem;">
+                            <strong style="color: var(--primary);">Word / Docs</strong>
+                            <p style="font-size: 0.8rem;">Informes y documentos</p>
+                        </div>
+                        <div class="card" style="text-align: center; padding: 1.5rem;">
+                            <strong style="color: var(--primary);">Canva</strong>
+                            <p style="font-size: 0.8rem;">Educación visual</p>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-top: 1rem; background: var(--primary); color: white; text-align: center;">
+                        "No se trata de dominar todo hoy; se trata de empezar a reconocer para qué sirve cada herramienta."
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 10: IA Responsable -->
+            <section class="slide" id="slide-10">
+                <div class="content-width">
+                    <h2 class="section-title">IA: El Copiloto Educativo</h2>
+                    <div class="grid-2">
+                        <div class="card">
+                            <h3 style="color: var(--accent);">✅ ¿Para qué usarla?</h3>
+                            <ul style="font-size: 0.95rem; margin-left: 1rem;">
+                                <li>Generar ejemplos técnicos rápidos.</li>
+                                <li>Organizar ideas para un trabajo.</li>
+                                <li>Simular datos para practicar Excel.</li>
+                                <li>Aclarar conceptos difíciles.</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3 style="color: #E53E3E;">⚠️ ¿Qué cuidar?</h3>
+                            <ul style="font-size: 0.95rem; margin-left: 1rem;">
+                                <li>No copiar y pegar sin pensar.</li>
+                                <li>Validar siempre la información.</li>
+                                <li>No es un reemplazo de tu criterio.</li>
+                                <li>Citar cuando se use como base.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="prompt-box">
+                        <span style="color: #48BB78;"># Ejemplo de Prompt:</span><br>
+                        <span class="prompt-text">"Genera una tabla con 10 pacientes ficticios para práctica de enfermería, incluyendo nombre, edad, temperatura, presión arterial y observación clínica."</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 11: Práctica 1 -->
+            <section class="slide" id="slide-11">
+                <div class="content-width">
+                    <h2 class="section-title">Práctica 2: Mi primera tabla digital</h2>
+                    <div class="grid-2">
+                        <div class="agenda-list">
+                            <div class="agenda-item">1. Solicitar datos a la IA (Prompt anterior)</div>
+                            <div class="agenda-item">2. Abrir Excel o Google Sheets</div>
+                            <div class="agenda-item">3. Crear los 5 encabezados técnicos</div>
+                            <div class="agenda-item">4. Organizar la información generada</div>
+                            <div class="agenda-item">5. Aplicar formato (Bordes, Negrita, Color)</div>
+                            <div class="agenda-item">6. Guardar: cl1_nombre_apellido</div>
+                        </div>
+                        <div class="card">
+                            <h4 style="margin-bottom: 1rem;">Mínimo esperado:</h4>
+                            <table style="width: 100%; font-size: 0.8rem; border-collapse: collapse;">
+                                <tr style="background: #edf2f7;">
+                                    <th style="border: 1px solid #cbd5e0; padding: 4px;">Paciente</th>
+                                    <th style="border: 1px solid #cbd5e0; padding: 4px;">Edad</th>
+                                    <th style="border: 1px solid #cbd5e0; padding: 4px;">Temp.</th>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #cbd5e0; padding: 4px;">...</td>
+                                    <td style="border: 1px solid #cbd5e0; padding: 4px;">...</td>
+                                    <td style="border: 1px solid #cbd5e0; padding: 4px;">...</td>
+                                </tr>
+                            </table>
+                            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--secondary);">Objetivo: Primera experiencia exitosa de organización de datos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 12: Cierre -->
+            <section class="slide" id="slide-12">
+                <div class="content-width">
+                    <h2 class="section-title">Cierre de Jornada</h2>
+                    <div class="grid-2">
+                        <div class="card" style="border-top: 6px solid var(--accent);">
+                            <h3>Checklist Final:</h3>
+                            <div class="checklist-item"><span class="check-icon">✓</span> Diagnóstico diligenciado</div>
+                            <div class="checklist-item"><span class="check-icon">✓</span> Carpeta del módulo creada</div>
+                            <div class="checklist-item"><span class="check-icon">✓</span> Primera tabla finalizada</div>
+                            <div class="checklist-item"><span class="check-icon">✓</span> Archivo subido/enviado</div>
+                        </div>
+                        <div class="card">
+                            <h3>Próxima Sesión:</h3>
+                            <p>Fortalecimiento de la organización digital y profundización en herramientas de productividad.</p>
+                            <div style="margin-top: 1.5rem; text-align: center;">
+                                <span style="font-size: 3rem;">👋</span>
+                                <p style="font-weight: bold; margin-top: 0.5rem;">¡Gracias por su disposición!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 2rem; text-align: center; color: var(--primary); font-weight: 700;">"Hoy no se trataba de saberlo todo, sino de comenzar con orden."</p>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Progress and Navigation Navigation -->
+        <div class="controls">
+            <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>
+                <span>Anterior</span>
+            </button>
+            
+            <div class="progress-indicator">
+                <span class="slide-count" id="slide-count">1 / 12</span>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progress-bar"></div>
+                </div>
+            </div>
+
+            <button class="nav-btn" id="nextBtn" onclick="nextSlide()">
+                <span>Siguiente</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 12;
+
+        function updateSlide() {
+            // Update active slide class
+            document.querySelectorAll('.slide').forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index + 1 === currentSlide) {
+                    slide.classList.add('active');
+                }
+            });
+
+            // Update controls
+            document.getElementById('prevBtn').disabled = (currentSlide === 1);
+            document.getElementById('nextBtn').disabled = (currentSlide === totalSlides);
+            
+            // Update progress
+            document.getElementById('slide-count').innerText = `${currentSlide} / ${totalSlides}`;
+            const progressPercentage = (currentSlide / totalSlides) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercentage}%`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        // Fullscreen function
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Initial setup
+        updateSlide();
+    </script>
+</body>
+</html>
