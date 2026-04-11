@@ -31,6 +31,8 @@
             overflow: hidden;
             height: 100vh;
             width: 100vw;
+            /* Se aumentó el tamaño base de la letra para toda la presentación */
+            font-size: 1.15rem; 
         }
 
         /* Presentation Wrapper */
@@ -84,7 +86,7 @@
         }
 
         .hero-title {
-            font-size: 3.5rem;
+            font-size: 4rem; /* Letra más grande */
             color: var(--primary);
             font-weight: 800;
             line-height: 1.1;
@@ -93,14 +95,14 @@
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
+            font-size: 1.8rem; /* Letra más grande */
             color: var(--secondary);
             margin-bottom: 2.5rem;
             text-align: center;
         }
 
         .section-title {
-            font-size: 2.5rem;
+            font-size: 2.8rem; /* Letra más grande */
             color: var(--primary);
             margin-bottom: 2rem;
             border-bottom: 4px solid var(--accent);
@@ -136,6 +138,7 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            font-size: 1.5rem; /* Letra de títulos de tarjetas más grande */
         }
 
         .agenda-list {
@@ -155,6 +158,7 @@
             border-left: 6px solid var(--primary);
             font-weight: 500;
             box-shadow: var(--shadow);
+            font-size: 1.2rem; /* Letra más grande */
         }
 
         .agenda-number {
@@ -166,7 +170,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
 
         .roadmap {
@@ -183,6 +187,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 1.1rem; /* Letra más grande */
         }
 
         .roadmap-item.active {
@@ -195,7 +200,7 @@
             align-items: flex-start;
             gap: 1rem;
             margin-bottom: 1rem;
-            font-size: 1.1rem;
+            font-size: 1.25rem; /* Letra más grande */
         }
 
         .check-icon {
@@ -211,6 +216,7 @@
             font-family: 'Courier New', Courier, monospace;
             margin-top: 1rem;
             border-left: 4px solid var(--accent);
+            font-size: 1.1rem; /* Letra más grande */
         }
 
         .prompt-text {
@@ -228,7 +234,7 @@
             gap: 2rem;
             z-index: 1000;
             background: rgba(255, 255, 255, 0.9);
-            padding: 0.75rem 1.5rem;
+            padding: 0.6rem 1.2rem;
             border-radius: 50px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
@@ -238,14 +244,15 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 25px;
+            padding: 0.4rem 0.8rem; /* Botones más pequeños */
+            font-size: 0.8rem; /* Letra del botón más pequeña */
+            border-radius: 20px;
             cursor: pointer;
             font-weight: 600;
             transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
 
         .nav-btn:hover:not(:disabled) {
@@ -267,7 +274,7 @@
         }
 
         .slide-count {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: var(--primary);
         }
@@ -302,11 +309,39 @@
 
         .fullscreen-btn:hover { opacity: 1; }
 
-        .meta-strip {
+        /* Estilos del Botón de Retorno */
+        .back-to-menu {
             position: fixed;
             top: 1.5rem;
-            left: 2rem;
-            font-size: 0.85rem;
+            left: 1.5rem;
+            background: var(--white);
+            border: 1px solid var(--soft-gray);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .back-to-menu:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .meta-strip {
+            position: fixed;
+            top: 2rem;
+            left: 9rem;
+            font-size: 0.95rem;
             color: var(--secondary);
             font-weight: 600;
             text-transform: uppercase;
@@ -316,11 +351,13 @@
         /* Responsiveness */
         @media (max-width: 768px) {
             .slide { padding: 2rem; }
-            .hero-title { font-size: 2rem; }
+            .hero-title { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1.3rem; }
             .grid-2 { grid-template-columns: 1fr; }
-            .section-title { font-size: 1.8rem; }
+            .section-title { font-size: 2rem; }
             .controls { width: 90%; justify-content: space-between; gap: 0.5rem; }
             .progress-bar-container { width: 80px; }
+            .meta-strip { display: none; } /* Ocultar en móvil para evitar choque con el botón volver */
         }
 
         /* Icons (SVG Inline) */
@@ -329,7 +366,13 @@
 </head>
 <body>
 
+    <a href="../index.html" class="back-to-menu" title="Volver al Menú Principal">
+        <svg class="icon" viewBox="0 0 24 24" style="width: 20px; height: 20px;"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        Menú
+    </a>
+
     <div class="meta-strip">Politécnico San Mateo | Auxiliar en Enfermería</div>
+    
     <button class="fullscreen-btn" onclick="toggleFullScreen()" title="Pantalla Completa">
         <svg class="icon" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
     </button>
@@ -347,7 +390,7 @@
                     <h2 class="hero-subtitle">Clase 1: Inducción, diagnóstico digital y organización del trabajo</h2>
                     <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
                         <p style="margin-bottom: 1rem; font-weight: 600; color: var(--primary);">Docente: William Bernal</p>
-                        <p style="font-size: 0.95rem; color: var(--text);">Horario: 7:00 a. m. – 4:00 p. m. | Frecuencia: cada 15 días</p>
+                        <p style="font-size: 1.15rem; color: var(--text);">Horario: 7:00 a. m. – 4:00 p. m. | Frecuencia: cada 15 días</p>
                         <hr style="margin: 1.5rem 0; opacity: 0.2;">
                         <p style="font-style: italic;">"Primer encuentro para instalar el curso, conocer el grupo y empezar con una evidencia real."</p>
                     </div>
@@ -366,7 +409,7 @@
                         <div class="agenda-item"><span class="agenda-number">5</span> Primera práctica digital aplicada</div>
                         <div class="agenda-item"><span class="agenda-number">6</span> Cierre y entrega de evidencia final</div>
                     </div>
-                    <p style="margin-top: 2rem; color: var(--secondary); font-weight: bold; text-align: center;">Hoy no buscamos correr; buscamos comenzar bien.</p>
+                    <p style="margin-top: 2rem; color: var(--secondary); font-weight: bold; text-align: center; font-size: 1.25rem;">Hoy no buscamos correr; buscamos comenzar bien.</p>
                 </div>
             </section>
 
@@ -411,8 +454,8 @@
                             <div class="agenda-item">Retroalimentación inmediata</div>
                         </div>
                         <div class="card">
-                            <h4 style="margin-bottom: 1rem; color: var(--primary);">Reglas de Oro:</h4>
-                            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.8rem;">
+                            <h4 style="margin-bottom: 1rem; color: var(--primary); font-size: 1.3rem;">Reglas de Oro:</h4>
+                            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.8rem; font-size: 1.15rem;">
                                 <li>✅ Clases 70% prácticas</li>
                                 <li>✅ Trabajo basado en evidencias</li>
                                 <li>✅ Uso híbrido: Celular + PC</li>
@@ -438,7 +481,7 @@
                         <div class="roadmap-item"><span>Clase 7</span> <strong>Diseño educativo digital (Canva)</strong></div>
                         <div class="roadmap-item"><span>Clase 8</span> <strong>Proyecto integrador y cierre</strong></div>
                     </div>
-                    <p style="margin-top: 1.5rem; font-size: 0.9rem; text-align: center; color: var(--secondary);">Vamos de lo básico a lo aplicado para construir una base real.</p>
+                    <p style="margin-top: 1.5rem; font-size: 1.1rem; text-align: center; color: var(--secondary);">Vamos de lo básico a lo aplicado para construir una base real.</p>
                 </div>
             </section>
 
@@ -446,7 +489,7 @@
             <section class="slide" id="slide-6">
                 <div class="content-width">
                     <h2 class="section-title">Punto de partida</h2>
-                    <p style="margin-bottom: 2rem; font-size: 1.2rem;">Antes de avanzar, reflexionemos sobre nuestras habilidades actuales:</p>
+                    <p style="margin-bottom: 2rem; font-size: 1.3rem;">Antes de avanzar, reflexionemos sobre nuestras habilidades actuales:</p>
                     <div class="grid-2">
                         <div class="card">
                             <div class="checklist-item">❓ ¿Qué tanto manejas el correo electrónico?</div>
@@ -459,7 +502,7 @@
                             <div class="checklist-item">❓ ¿Qué esperas fortalecer en este módulo?</div>
                         </div>
                     </div>
-                    <p style="margin-top: 2rem; text-align: center; color: var(--secondary); font-style: italic;">El diagnóstico no es una nota; es el mapa para orientar mi apoyo hacia ustedes.</p>
+                    <p style="margin-top: 2rem; text-align: center; color: var(--secondary); font-style: italic; font-size: 1.25rem;">El diagnóstico no es una nota; es el mapa para orientar mi apoyo hacia ustedes.</p>
                 </div>
             </section>
 
@@ -470,7 +513,7 @@
                     <div class="grid-2">
                         <div class="card" style="border-top: 6px solid var(--accent);">
                             <h3 style="color: var(--primary);">Instrucciones</h3>
-                            <ol style="margin-left: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem;">
+                            <ol style="margin-left: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem; font-size: 1.15rem;">
                                 <li>Escanear el código QR o abrir el enlace compartido en WhatsApp.</li>
                                 <li>Responder con total sinceridad.</li>
                                 <li>Asegurarse de escribir correctamente su correo.</li>
@@ -479,7 +522,7 @@
                         </div>
                         <div class="card">
                             <h3>Información a recoger:</h3>
-                            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem;">
+                            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 1.1rem;">
                                 <li>🔹 Datos de contacto y perfil</li>
                                 <li>🔹 Acceso a tecnología y conectividad</li>
                                 <li>🔹 Nivel autopercibido en ofimática</li>
@@ -504,17 +547,17 @@
                             <h3>Checklist Inicial:</h3>
                             <div class="checklist-item"><span class="check-icon">✓</span> Correo electrónico activo y accesible.</div>
                             <div class="checklist-item"><span class="check-icon">✓</span> Pertenecer al grupo oficial de WhatsApp.</div>
-                            <div class="checklist-item"><span class="check-icon">✓</span> Creación de carpeta "TICs - Nombre Estudiante".</div>
+                            <div class="checklist-item"><span class="check-icon">✓</span> Creación de carpeta "TICs - Nombre".</div>
                             <div class="checklist-item"><span class="check-icon">✓</span> Nombramiento estándar de archivos.</div>
                         </div>
                         <div class="card">
                             <h3>Ejemplos de Nombres:</h3>
                             <div class="prompt-box" style="background: #edf2f7; color: #2d3748; border-left-color: var(--primary);">
                                 cl1_juan_perez.xlsx<br>
-                                tablaPacientes_ana_gomez.docx<br>
-                                evidencia_final_luis_rodriguez.pdf
+                                tablaPacientes_ana.docx<br>
+                                evidencia_final_luis.pdf
                             </div>
-                            <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--secondary);">El orden digital es la primera competencia que evaluaremos.</p>
+                            <p style="margin-top: 1rem; font-size: 1.1rem; color: var(--secondary);">El orden digital es la primera competencia que evaluaremos.</p>
                         </div>
                     </div>
                 </div>
@@ -526,31 +569,31 @@
                     <h2 class="section-title">Nuestro Ecosistema Digital</h2>
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
                         <div class="card" style="text-align: center; padding: 1.5rem;">
-                            <strong style="color: var(--primary);">Google Forms</strong>
-                            <p style="font-size: 0.8rem;">Recolección y diagnóstico</p>
+                            <strong style="color: var(--primary); font-size: 1.25rem;">Google Forms</strong>
+                            <p style="font-size: 1rem; margin-top: 0.5rem;">Recolección y diagnóstico</p>
                         </div>
                         <div class="card" style="text-align: center; padding: 1.5rem;">
-                            <strong style="color: var(--primary);">WhatsApp</strong>
-                            <p style="font-size: 0.8rem;">Comunicación y enlaces</p>
+                            <strong style="color: var(--primary); font-size: 1.25rem;">WhatsApp</strong>
+                            <p style="font-size: 1rem; margin-top: 0.5rem;">Comunicación y enlaces</p>
                         </div>
                         <div class="card" style="text-align: center; padding: 1.5rem;">
-                            <strong style="color: var(--primary);">Google Drive</strong>
-                            <p style="font-size: 0.8rem;">Respaldo y evidencias</p>
+                            <strong style="color: var(--primary); font-size: 1.25rem;">Google Drive</strong>
+                            <p style="font-size: 1rem; margin-top: 0.5rem;">Respaldo y evidencias</p>
                         </div>
                         <div class="card" style="text-align: center; padding: 1.5rem;">
-                            <strong style="color: var(--primary);">Excel / Sheets</strong>
-                            <p style="font-size: 0.8rem;">Datos y tablas de salud</p>
+                            <strong style="color: var(--primary); font-size: 1.25rem;">Excel / Sheets</strong>
+                            <p style="font-size: 1rem; margin-top: 0.5rem;">Datos y tablas de salud</p>
                         </div>
                         <div class="card" style="text-align: center; padding: 1.5rem;">
-                            <strong style="color: var(--primary);">Word / Docs</strong>
-                            <p style="font-size: 0.8rem;">Informes y documentos</p>
+                            <strong style="color: var(--primary); font-size: 1.25rem;">Word / Docs</strong>
+                            <p style="font-size: 1rem; margin-top: 0.5rem;">Informes y documentos</p>
                         </div>
                         <div class="card" style="text-align: center; padding: 1.5rem;">
-                            <strong style="color: var(--primary);">Canva</strong>
-                            <p style="font-size: 0.8rem;">Educación visual</p>
+                            <strong style="color: var(--primary); font-size: 1.25rem;">Canva</strong>
+                            <p style="font-size: 1rem; margin-top: 0.5rem;">Educación visual</p>
                         </div>
                     </div>
-                    <div class="card" style="margin-top: 1rem; background: var(--primary); color: white; text-align: center;">
+                    <div class="card" style="margin-top: 1rem; background: var(--primary); color: white; text-align: center; font-size: 1.2rem;">
                         "No se trata de dominar todo hoy; se trata de empezar a reconocer para qué sirve cada herramienta."
                     </div>
                 </div>
@@ -563,7 +606,7 @@
                     <div class="grid-2">
                         <div class="card">
                             <h3 style="color: var(--accent);">✅ ¿Para qué usarla?</h3>
-                            <ul style="font-size: 0.95rem; margin-left: 1rem;">
+                            <ul style="font-size: 1.15rem; margin-left: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
                                 <li>Generar ejemplos técnicos rápidos.</li>
                                 <li>Organizar ideas para un trabajo.</li>
                                 <li>Simular datos para practicar Excel.</li>
@@ -572,7 +615,7 @@
                         </div>
                         <div class="card">
                             <h3 style="color: #E53E3E;">⚠️ ¿Qué cuidar?</h3>
-                            <ul style="font-size: 0.95rem; margin-left: 1rem;">
+                            <ul style="font-size: 1.15rem; margin-left: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
                                 <li>No copiar y pegar sin pensar.</li>
                                 <li>Validar siempre la información.</li>
                                 <li>No es un reemplazo de tu criterio.</li>
@@ -601,20 +644,20 @@
                             <div class="agenda-item">6. Guardar: cl1_nombre_apellido</div>
                         </div>
                         <div class="card">
-                            <h4 style="margin-bottom: 1rem;">Mínimo esperado:</h4>
-                            <table style="width: 100%; font-size: 0.8rem; border-collapse: collapse;">
+                            <h4 style="margin-bottom: 1rem; font-size: 1.3rem;">Mínimo esperado:</h4>
+                            <table style="width: 100%; font-size: 1.1rem; border-collapse: collapse; text-align: left;">
                                 <tr style="background: #edf2f7;">
-                                    <th style="border: 1px solid #cbd5e0; padding: 4px;">Paciente</th>
-                                    <th style="border: 1px solid #cbd5e0; padding: 4px;">Edad</th>
-                                    <th style="border: 1px solid #cbd5e0; padding: 4px;">Temp.</th>
+                                    <th style="border: 1px solid #cbd5e0; padding: 8px;">Paciente</th>
+                                    <th style="border: 1px solid #cbd5e0; padding: 8px;">Edad</th>
+                                    <th style="border: 1px solid #cbd5e0; padding: 8px;">Temp.</th>
                                 </tr>
                                 <tr>
-                                    <td style="border: 1px solid #cbd5e0; padding: 4px;">...</td>
-                                    <td style="border: 1px solid #cbd5e0; padding: 4px;">...</td>
-                                    <td style="border: 1px solid #cbd5e0; padding: 4px;">...</td>
+                                    <td style="border: 1px solid #cbd5e0; padding: 8px;">...</td>
+                                    <td style="border: 1px solid #cbd5e0; padding: 8px;">...</td>
+                                    <td style="border: 1px solid #cbd5e0; padding: 8px;">...</td>
                                 </tr>
                             </table>
-                            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--secondary);">Objetivo: Primera experiencia exitosa de organización de datos.</p>
+                            <p style="margin-top: 1rem; font-size: 1.1rem; color: var(--secondary);">Objetivo: Primera experiencia exitosa de organización de datos.</p>
                         </div>
                     </div>
                 </div>
@@ -636,20 +679,21 @@
                             <h3>Próxima Sesión:</h3>
                             <p>Fortalecimiento de la organización digital y profundización en herramientas de productividad.</p>
                             <div style="margin-top: 1.5rem; text-align: center;">
-                                <span style="font-size: 3rem;">👋</span>
+                                <span style="font-size: 3.5rem;">👋</span>
                                 <p style="font-weight: bold; margin-top: 0.5rem;">¡Gracias por su disposición!</p>
                             </div>
                         </div>
                     </div>
-                    <p style="margin-top: 2rem; text-align: center; color: var(--primary); font-weight: 700;">"Hoy no se trataba de saberlo todo, sino de comenzar con orden."</p>
+                    <p style="margin-top: 2rem; text-align: center; color: var(--primary); font-weight: 700; font-size: 1.4rem;">"Hoy no se trataba de saberlo todo, sino de comenzar con orden."</p>
                 </div>
             </section>
 
         </div>
 
-        <!-- Progress and Navigation Navigation -->
+        <!-- Progress and Navigation Controls -->
         <div class="controls">
             <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>
+                <svg class="icon" viewBox="0 0 24 24" style="width: 16px; height: 16px;"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
                 <span>Anterior</span>
             </button>
             
@@ -662,6 +706,7 @@
 
             <button class="nav-btn" id="nextBtn" onclick="nextSlide()">
                 <span>Siguiente</span>
+                <svg class="icon" viewBox="0 0 24 24" style="width: 16px; height: 16px;"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
             </button>
         </div>
     </div>
