@@ -1,1 +1,800 @@
-hola!!
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clase 2 | Módulo TIC's – Auxiliar en Enfermería</title>
+  <style>
+    :root {
+      --primary: #0f4c81;
+      --secondary: #2e8b8b;
+      --accent: #5cb85c;
+      --bg: #f4f8fb;
+      --surface: #ffffff;
+      --surface-2: #eef5f9;
+      --text: #1f2937;
+      --muted: #5b6574;
+      --line: #d9e2ec;
+      --shadow: 0 10px 30px rgba(15, 76, 129, 0.12);
+      --radius: 22px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f4f8fb 0%, #edf4f7 100%);
+      min-height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 22px;
+      background: rgba(255,255,255,0.88);
+      border-bottom: 1px solid rgba(217, 226, 236, 0.95);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 700;
+      box-shadow: var(--shadow);
+      flex: 0 0 auto;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-text strong,
+    .brand-text span {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-text strong { font-size: 0.98rem; }
+    .brand-text span { color: var(--muted); font-size: 0.9rem; }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.2s ease, background 0.2s ease;
+      font-size: 0.94rem;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-secondary { background: var(--surface-2); color: var(--text); }
+    .btn-accent { background: var(--accent); color: #fff; }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 200px;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 10px;
+      background: #e7eef5;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 8.33%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.25s ease;
+    }
+
+    .counter {
+      color: var(--muted);
+      font-weight: 600;
+      min-width: 56px;
+      text-align: right;
+    }
+
+    main {
+      flex: 1;
+      position: relative;
+    }
+
+    .deck {
+      width: 100%;
+      height: calc(100vh - 77px);
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(40px) scale(0.98);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      padding: 26px;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0) scale(1);
+    }
+
+    .slide-card {
+      max-width: var(--max);
+      margin: 0 auto;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(217, 226, 236, 0.95);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 34px;
+    }
+
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--primary);
+      text-transform: uppercase;
+      background: #eaf3fb;
+      padding: 9px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    h1, h2 {
+      margin: 0 0 10px 0;
+      line-height: 1.1;
+    }
+
+    h1 { font-size: clamp(2rem, 3vw, 3.15rem); }
+    h2 { font-size: clamp(1.65rem, 2.5vw, 2.4rem); }
+
+    p, li {
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    .lead {
+      font-size: 1.08rem;
+      color: var(--muted);
+      max-width: 900px;
+    }
+
+    .meta-grid,
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+      display: grid;
+      gap: 18px;
+    }
+
+    .meta-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .card h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.02rem;
+      color: var(--primary);
+    }
+
+    .card p:last-child,
+    .card ul:last-child { margin-bottom: 0; }
+
+    .metric {
+      padding: 18px;
+      background: linear-gradient(180deg, #fbfdff, #eff6fb);
+      border: 1px solid #dce7f1;
+      border-radius: 18px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.45rem;
+      margin-top: 6px;
+      color: var(--primary);
+    }
+
+    .list-clean {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .list-clean li {
+      padding: 10px 0 10px 30px;
+      border-bottom: 1px solid #edf2f7;
+      position: relative;
+    }
+
+    .list-clean li:last-child { border-bottom: 0; }
+    .list-clean li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 10px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 16px;
+      align-items: start;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .timeline-item strong {
+      color: var(--primary);
+      display: block;
+      font-size: 0.98rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      background: #eef5f9;
+      color: var(--text);
+      border: 1px solid #dae6ef;
+      border-radius: 999px;
+      padding: 9px 13px;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .section-title {
+      font-size: 1.12rem;
+      color: var(--primary);
+      margin: 0 0 12px 0;
+      font-weight: 700;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+      background: #fff;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #edf2f7;
+      text-align: left;
+      font-size: 0.96rem;
+    }
+
+    th {
+      background: #f2f8fc;
+      color: var(--primary);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    code, .code-box {
+      font-family: Consolas, Monaco, monospace;
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 18px;
+    }
+
+    .code-box {
+      padding: 18px;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      font-size: 0.96rem;
+      margin-top: 8px;
+    }
+
+    .callout {
+      border-left: 5px solid var(--secondary);
+      background: #eff9f8;
+      padding: 16px 18px;
+      border-radius: 14px;
+      color: var(--text);
+      margin-top: 16px;
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .slide-nav-dots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      max-width: 480px;
+      justify-content: flex-end;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      border: 1px solid #bfd0df;
+      background: #eef3f8;
+      cursor: pointer;
+    }
+
+    .dot.active { background: var(--primary); border-color: var(--primary); }
+
+    @media (max-width: 980px) {
+      .meta-grid, .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+      .timeline-item { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 700px) {
+      html, body { overflow: auto; }
+      .topbar {
+        padding: 12px 14px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .toolbar {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .progress-wrap { width: 100%; }
+      .deck { height: auto; }
+      .slide {
+        position: static;
+        display: none;
+        transform: none;
+        opacity: 1;
+        pointer-events: auto;
+        padding: 14px;
+      }
+      .slide.active { display: block; }
+      .slide-card { padding: 22px; border-radius: 22px; }
+      .meta-grid, .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .slide-header { margin-bottom: 20px; }
+      .brand-text strong, .brand-text span { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-badge">C2</div>
+      <div class="brand-text">
+        <strong>Módulo TIC's – Auxiliar en Enfermería</strong>
+        <span>Clase 2 · Organización digital del trabajo académico y técnico</span>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn-secondary" id="prevBtn">← Anterior</button>
+      <button class="btn-primary" id="nextBtn">Siguiente →</button>
+      <button class="btn-accent" id="fullscreenBtn">Pantalla completa</button>
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="counter" id="counter">1 / 12</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="deck" id="deck">
+      <article class="slide active">
+        <div class="slide-card">
+          <div class="slide-header">
+            <div>
+              <div class="eyebrow">Clase 2 · Reencuadre del módulo</div>
+              <h1>Organización digital del trabajo académico y técnico</h1>
+              <p class="lead">Esta sesión consolida el ecosistema digital del curso y abre una entrada más firme a Excel o Google Sheets, preparando el camino para el trabajo con datos aplicado al área de salud.</p>
+            </div>
+            <div class="slide-nav-dots" id="dotWrapTop"></div>
+          </div>
+
+          <div class="meta-grid">
+            <div class="metric"><span>Jornada</span><strong>7:00 a. m. – 4:00 p. m.</strong></div>
+            <div class="metric"><span>Descanso</span><strong>9:30 – 10:00</strong></div>
+            <div class="metric"><span>Almuerzo</span><strong>12:00 – 1:00</strong></div>
+            <div class="metric"><span>Propósito</span><strong>Orden + Excel básico</strong></div>
+          </div>
+
+          <div class="callout">Hoy no se trata solo de abrir Excel. Se trata de fortalecer la forma en que el estudiante organiza, guarda, recupera y entrega su trabajo digital dentro del módulo.</div>
+
+          <p class="footer-note">Docente: William Bernal · Politécnico San Mateo · Programa: Auxiliar en Enfermería</p>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-card">
+          <div class="eyebrow">Ruta de la jornada</div>
+          <h2>¿Qué haremos en la Clase 2?</h2>
+          <div class="timeline">
+            <div class="timeline-item"><strong>Bloque 1</strong><div>Retomar lo construido en la Clase 1, verificar carpetas, archivos, enlaces y recursos compartidos del curso.</div></div>
+            <div class="timeline-item"><strong>Bloque 2</strong><div>Reconocer el entorno de Excel o Google Sheets: filas, columnas, celdas, rangos y formato básico.</div></div>
+            <div class="timeline-item"><strong>Bloque 3</strong><div>Desarrollar una tabla sencilla, guardarla con orden y entregarla por el medio oficial del módulo.</div></div>
+          </div>
+          <div class="pill-row">
+            <span class="pill">Continuidad con Clase 1</span>
+            <span class="pill">Consolidación del sistema</span>
+            <span class="pill">Puente hacia Excel aplicado</span>
+            <span class="pill">Evidencia final obligatoria</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-card">
+          <div class="eyebrow">Conexión con la sesión anterior</div>
+          <h2>Lo que ya logramos en la Clase 1</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Base del curso instalada</h3>
+              <ul class="list-clean">
+                <li>Presentación del módulo</li>
+                <li>Creación del grupo de WhatsApp</li>
+                <li>Diagnóstico digital inicial</li>
+                <li>Uso inicial de Drive y carpetas</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Primera experiencia digital</h3>
+              <ul class="list-clean">
+                <li>Introducción responsable a la IA</li>
+                <li>Tabla sencilla de práctica</li>
+                <li>Guardado básico del archivo</li>
+                <li>Entrega formal de la evidencia</li>
+              </ul>
+            </div>
+          </div>
+          <div class="callout">La Clase 2 no repite la Clase 1. La fortalece. Hoy el objetivo es que el estudiante gane autonomía y seguridad en su entorno digital de trabajo.</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-card">
+          <div class="eyebrow">Sentido formativo</div>
+          <h2>¿Por qué el orden digital también es una competencia?</h2>
+          <div class="grid-3">
+            <div class="card"><h3>Evita pérdida de evidencias</h3><p>Cuando el estudiante organiza carpetas, nombres de archivo y recursos, reduce errores y gana continuidad entre clases.</p></div>
+            <div class="card"><h3>Mejora la autonomía</h3><p>Ubicar, descargar, renombrar y guardar recursos correctamente es una capacidad transversal para el trabajo académico y técnico.</p></div>
+            <div class="card"><h3>Prepara el trabajo con datos</h3><p>El orden digital es el paso previo para usar hojas de cálculo, documentos y recursos de manera más segura y eficaz.</p></div>
+          </div>
+          <div class="footer-note">Idea guía de la sesión: el estudiante no solo aprende herramientas; aprende una forma de trabajar.</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-card">
+          <div class="eyebrow">Ecosistema del curso</div>
+          <h2>Revisión del sistema digital del módulo</h2>
+          <div class="grid-4">
+            <div class="card"><h3>WhatsApp</h3><p>Canal oficial para avisos, enlaces, recordatorios y recursos de clase.</p></div>
+            <div class="card"><h3>Google Drive</h3><p>Espacio de recursos del docente y organización personal del estudiante.</p></div>
+            <div class="card"><h3>Google Forms</h3><p>Medio formal de diagnóstico, seguimiento y entrega de evidencias.</p></div>
+            <div class="card"><h3>GitHub Pages</h3><p>Soporte de presentaciones y artefactos HTML del módulo.</p></div>
+          </div>
+          <div class="callout">Regla del curso: recursos compartidos desde el Drive del docente, organización del trabajo en el Drive del estudiante y entregas por formulario.</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-card">
+          <div class="eyebrow">Bloque 1</div>
+          <h2>Organización de carpetas, archivos y recursos</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Verificación mínima del estudiante</h3>
+              <ul class="list-clean">
+                <li>Correo activo y funcional</li>
+                <li>Acceso a carpeta personal del módulo</li>
+                <li>Subcarpetas por clase creadas</li>
+                <li>Ubicación correcta de archivos previos</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Mini actividad de consolidación</h3>
+              <ul class="list-clean">
+                <li>Descargar un recurso compartido</li>
+                <li>Renombrarlo con la convención oficial</li>
+                <li>Guardarlo en la carpeta correcta</li>
+                <li>Volver a ubicarlo en Drive</li>
+              </ul>
+            </div>
+          </div>
+          <div class="code-box">Convención oficial de nombres:
+cl2_nombreapellido_tablabasica.xlsx</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-card">
+          <div class="eyebrow">Bloque 2</div>
+          <h2>Introducción al entorno de Excel o Google Sheets</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Elementos a reconocer</h3>
+              <ul class="list-clean">
+                <li>Fila</li>
+                <li>Columna</li>
+                <li>Celda</li>
+                <li>Rango</li>
+                <li>Hoja</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Acciones básicas a practicar</h3>
+              <ul class="list-clean">
+                <li>Escribir y editar datos</li>
+                <li>Crear encabezados</li>
+                <li>Usar negrita y bordes</li>
+                <li>Alinear contenido</li>
+                <li>Ajustar ancho de columnas</li>
+              </ul>
+            </div>
+          </div>
+          <div class="callout">En esta clase no trabajaremos fórmulas complejas. La meta es ganar seguridad en el entorno, la escritura tabular y el guardado correcto.</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-card">
+          <div class="eyebrow">Demostración guiada</div>
+          <h2>Así se construye una tabla básica</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Recurso o actividad</th>
+                  <th>Tipo de archivo</th>
+                  <th>Clase</th>
+                  <th>Fecha</th>
+                  <th>Observación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Presentación del módulo</td><td>HTML / PDF</td><td>1</td><td>Sesión inicial</td><td>Revisada en clase</td></tr>
+                <tr><td>Formulario diagnóstico</td><td>Google Form</td><td>1</td><td>Sesión inicial</td><td>Diligenciado</td></tr>
+                <tr><td>Tabla básica</td><td>XLSX</td><td>2</td><td>Sesión actual</td><td>En construcción</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="footer-note">Esta estructura es deliberadamente sencilla para concentrarse en organización, formato y guardado, no en complejidad de contenido.</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-card">
+          <div class="eyebrow">IA como apoyo</div>
+          <h2>Uso del prompt para generar datos de práctica</h2>
+          <p class="lead">La IA se utiliza como copiloto educativo para acelerar la creación de ejemplos, no para reemplazar el trabajo del estudiante.</p>
+          <div class="code-box">Actúa como asistente educativo para una clase inicial de organización digital y Excel básico en el programa Auxiliar en Enfermería. Genera una tabla sencilla con 10 registros de ejemplo para practicar en Excel o Google Sheets. La tabla debe incluir estas columnas: Recurso o actividad, Tipo de archivo, Clase, Fecha y Observación. Usa ejemplos simples, claros y fáciles de copiar en una hoja de cálculo. Presenta la información en formato de tabla.</div>
+          <div class="callout">Después de obtener la tabla, el estudiante debe revisarla, copiarla, organizarla y presentarla por sí mismo en la hoja de cálculo.</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-card">
+          <div class="eyebrow">Actividad central</div>
+          <h2>Práctica guiada de la Clase 2</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Secuencia de trabajo</h3>
+              <ol>
+                <li>Generar datos de ejemplo con IA.</li>
+                <li>Abrir Excel o Google Sheets.</li>
+                <li>Crear encabezados de la tabla.</li>
+                <li>Copiar o digitar la información.</li>
+                <li>Aplicar formato básico.</li>
+                <li>Guardar con nombre correcto.</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Formato mínimo esperado</h3>
+              <ul class="list-clean">
+                <li>Encabezados claros</li>
+                <li>Datos completos</li>
+                <li>Negrita en títulos</li>
+                <li>Bordes visibles</li>
+                <li>Columnas ajustadas</li>
+                <li>Archivo bien nombrado</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-card">
+          <div class="eyebrow">Evidencia</div>
+          <h2>¿Qué debe quedar listo hoy?</h2>
+          <div class="grid-3">
+            <div class="card"><h3>Organización digital</h3><p>Carpeta personal revisada, archivos bien nombrados y recursos ubicados correctamente.</p></div>
+            <div class="card"><h3>Tabla básica</h3><p>Archivo de hoja de cálculo con encabezados, datos, formato elemental y guardado correcto.</p></div>
+            <div class="card"><h3>Entrega formal</h3><p>Envío de la evidencia por formulario o medio oficial definido para la sesión.</p></div>
+          </div>
+          <div class="code-box">Nombre sugerido del archivo:
+cl2_nombreapellido_tablabasica.xlsx</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="slide-card">
+          <div class="eyebrow">Cierre pedagógico</div>
+          <h2>Lo que deja esta clase y lo que viene después</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Lo que logramos hoy</h3>
+              <ul class="list-clean">
+                <li>Consolidar el orden digital del curso</li>
+                <li>Ganar autonomía en Drive y recursos compartidos</li>
+                <li>Reconocer el entorno básico de Excel o Sheets</li>
+                <li>Construir una primera tabla con más seguridad</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Cómo se conecta con la Clase 3</h3>
+              <p>La próxima sesión podrá centrarse con más fuerza en Excel básico aplicado al área de salud, porque los problemas de acceso, organización y reconocimiento inicial del entorno ya habrán sido fortalecidos.</p>
+            </div>
+          </div>
+          <div class="callout">Mensaje final para el grupo: hoy no se trató solo de abrir Excel; se trató de aprender a trabajar mejor dentro del módulo.</div>
+          <p class="footer-note">Use las flechas del teclado para navegar. Este recurso está pensado para proyectarse, pero también puede revisarse desde celular o computador.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const counter = document.getElementById('counter');
+    const progressFill = document.getElementById('progressFill');
+    const dotWrapTop = document.getElementById('dotWrapTop');
+    let current = 0;
+
+    function createDots() {
+      slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'dot';
+        dot.setAttribute('aria-label', `Ir a la diapositiva ${i + 1}`);
+        dot.addEventListener('click', () => goTo(i));
+        dotWrapTop.appendChild(dot);
+      });
+    }
+
+    function updateDots() {
+      [...dotWrapTop.children].forEach((dot, i) => {
+        dot.classList.toggle('active', i === current);
+      });
+    }
+
+    function updateUI() {
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === slides.length - 1;
+      updateDots();
+    }
+
+    function goTo(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      updateUI();
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key.toLowerCase() === 'f') toggleFullscreen();
+    });
+
+    function toggleFullscreen() {
+      const root = document.documentElement;
+      if (!document.fullscreenElement) {
+        root.requestFullscreen?.();
+      } else {
+        document.exitFullscreen?.();
+      }
+    }
+
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    createDots();
+    updateUI();
+  </script>
+</body>
+</html>
