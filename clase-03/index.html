@@ -1,1 +1,437 @@
-hola!!
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clase 03 | Excel básico aplicado al área de salud</title>
+  <style>
+    :root{
+      --primary:#0f4c81;
+      --primary2:#1f6aa5;
+      --secondary:#2e8b8b;
+      --accent:#5cb85c;
+      --bg:#f3f8fc;
+      --surface:#ffffff;
+      --surface2:#eef5f9;
+      --line:#d8e3ec;
+      --text:#1f2937;
+      --muted:#5b6574;
+      --danger:#c94b4b;
+      --warning:#f0ad4e;
+      --shadow:0 14px 36px rgba(15,76,129,.12);
+      --radius:26px;
+      --max:1180px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;height:100%;font-family:"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,#f3f8fc 0%,#ebf2f7 100%);color:var(--text);overflow:hidden}
+    body{display:flex;flex-direction:column}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 22px;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:var(--shadow)}
+    .brand-text strong,.brand-text span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .brand-text strong{font-size:1rem}
+    .brand-text span{font-size:.9rem;color:var(--muted)}
+    .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    button{border:0;border-radius:12px;padding:11px 15px;font-size:.95rem;font-weight:700;cursor:pointer;transition:.18s ease}
+    button:hover{transform:translateY(-1px)}
+    button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-secondary{background:var(--surface2);color:var(--text)}
+    .btn-accent{background:var(--accent);color:#fff}
+    .progress-wrap{display:flex;align-items:center;gap:10px;min-width:230px}
+    .progress-track{flex:1;height:10px;background:#e4edf5;border-radius:999px;overflow:hidden}
+    .progress-fill{height:100%;width:7.14%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .25s ease}
+    .counter{min-width:58px;text-align:right;font-weight:700;color:var(--muted)}
+    main{flex:1;position:relative}.deck{height:calc(100vh - 77px);position:relative}
+    .slide{position:absolute;inset:0;opacity:0;pointer-events:none;transform:translateX(36px) scale(.98);transition:opacity .35s ease, transform .35s ease;padding:24px;overflow-y:auto}
+    .slide.active{opacity:1;pointer-events:auto;transform:translateX(0) scale(1)}
+    .wrap{max-width:var(--max);margin:0 auto;background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:30px;box-shadow:var(--shadow);padding:34px}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;background:#eaf3fb;color:var(--primary);font-size:.82rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+    h1,h2,h3{margin:0 0 10px 0;line-height:1.12}
+    h1{font-size:clamp(2rem,3vw,3.15rem)}
+    h2{font-size:clamp(1.7rem,2.4vw,2.35rem)}
+    h3{font-size:1.04rem;color:var(--primary)}
+    p,li{font-size:1rem;line-height:1.62}
+    .lead{font-size:1.08rem;color:var(--muted);max-width:920px}
+    .meta-grid,.grid-2,.grid-3,.grid-4,.compare{display:grid;gap:18px}
+    .meta-grid,.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid-2,.compare{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+    .metric{padding:18px;border:1px solid #dce7f1;border-radius:18px;background:linear-gradient(180deg,#fbfdff,#eff6fb)}
+    .metric strong{display:block;margin-top:6px;font-size:1.35rem;color:var(--primary)}
+    .list-clean,.list-warn{list-style:none;padding:0;margin:0}
+    .list-clean li,.list-warn li{padding:10px 0 10px 30px;position:relative;border-bottom:1px solid #edf2f7}
+    .list-clean li:last-child,.list-warn li:last-child{border-bottom:0}
+    .list-clean li::before{content:"✓";position:absolute;left:0;top:10px;color:var(--accent);font-weight:900}
+    .list-warn li::before{content:"!";position:absolute;left:0;top:10px;width:20px;height:20px;border-radius:999px;background:#fff1df;color:#9a5b00;display:grid;place-items:center;font-weight:900;font-size:.82rem}
+    .callout,.callout-warning{margin-top:16px;padding:16px 18px;border-radius:14px}
+    .callout{border-left:5px solid var(--secondary);background:#eff9f8}
+    .callout-warning{border-left:5px solid var(--warning);background:#fff8ea}
+    .pill-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.pill{padding:9px 13px;border-radius:999px;background:#eef5f9;border:1px solid #dae6ef;font-size:.92rem;font-weight:700}
+    .case{border:1px solid #dce7f1;background:linear-gradient(180deg,#fdfeff,#f4f9fc);border-radius:20px;padding:20px}
+    .label{display:inline-block;background:#eaf3fb;color:var(--primary);padding:7px 10px;border-radius:999px;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+    .good{border-color:#cfe9d2;background:#f4fbf4}.bad{border-color:#f2d2d1;background:#fff8f8}.good h3{color:#2f7d32}.bad h3{color:var(--danger)}
+    .table-wrap{overflow-x:auto;border-radius:18px;border:1px solid var(--line)}
+    table{width:100%;border-collapse:collapse;min-width:760px;background:#fff}
+    th,td{padding:14px 16px;border-bottom:1px solid #edf2f7;text-align:left;font-size:.95rem}
+    th{background:#f2f8fc;color:var(--primary);font-size:.88rem;text-transform:uppercase;letter-spacing:.04em}
+    .timeline{display:grid;gap:14px}.timeline-item{display:grid;grid-template-columns:170px 1fr;gap:14px;align-items:start;padding:16px;border:1px solid var(--line);border-radius:18px;background:#fff}.timeline-item strong{color:var(--primary)}
+    .code-box{margin-top:10px;background:#0f172a;color:#e2e8f0;border-radius:18px;padding:18px;font-family:Consolas,Monaco,monospace;white-space:pre-wrap;line-height:1.58;font-size:.95rem}
+    .footer-note{margin-top:24px;color:var(--muted);font-size:.94rem}
+    .dots{display:flex;flex-wrap:wrap;gap:8px;max-width:520px;justify-content:flex-end}.dot{width:12px;height:12px;border-radius:999px;border:1px solid #bfd0df;background:#eef3f8;cursor:pointer}.dot.active{background:var(--primary);border-color:var(--primary)}
+    @media (max-width:980px){.meta-grid,.grid-3,.grid-4,.grid-2,.compare{grid-template-columns:1fr 1fr}.timeline-item{grid-template-columns:1fr}}
+    @media (max-width:700px){html,body{overflow:auto}.topbar{padding:12px 14px;align-items:flex-start;flex-direction:column}.toolbar{width:100%;justify-content:flex-start}.progress-wrap{width:100%}.deck{height:auto}.slide{position:static;display:none;transform:none;opacity:1;pointer-events:auto;padding:14px}.slide.active{display:block}.wrap{padding:22px;border-radius:22px}.meta-grid,.grid-2,.grid-3,.grid-4,.compare{grid-template-columns:1fr}.brand-text strong,.brand-text span{white-space:normal}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">C3</div>
+      <div class="brand-text">
+        <strong>Módulo TIC's – Auxiliar en Enfermería</strong>
+        <span>Clase 03 · Excel básico aplicado al área de salud</span>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button class="btn-secondary" id="prevBtn">← Anterior</button>
+      <button class="btn-primary" id="nextBtn">Siguiente →</button>
+      <button class="btn-accent" id="fullscreenBtn">Pantalla completa</button>
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="counter" id="counter">1 / 14</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="deck" id="deck">
+      <article class="slide active">
+        <div class="wrap">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:24px;">
+            <div>
+              <div class="eyebrow">Clase 03 · Excel con sentido aplicado</div>
+              <h1>Excel básico aplicado al área de salud</h1>
+              <p class="lead">Hoy comenzamos a usar la hoja de cálculo para organizar información ficticia cercana al contexto de enfermería. La meta no es memorizar botones, sino aprender a registrar datos con orden, claridad y utilidad práctica.</p>
+            </div>
+            <div class="dots" id="dots"></div>
+          </div>
+          <div class="meta-grid">
+            <div class="metric"><span>Herramienta eje</span><strong>Excel / Sheets</strong></div>
+            <div class="metric"><span>Caso principal</span><strong>Signos vitales</strong></div>
+            <div class="metric"><span>Producto</span><strong>Registro básico</strong></div>
+            <div class="metric"><span>Entrega</span><strong>Formulario</strong></div>
+          </div>
+          <div class="callout">Idea central: una hoja de cálculo sirve para organizar y presentar datos. Hoy vamos a practicar con información ficticia, pero con una estructura muy parecida a la que se usa para controlar y registrar datos en contextos reales.</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">Ruta de aprendizaje</div>
+          <h2>¿Qué aprenderemos en la Clase 3?</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Contenido de la mañana</h3>
+              <ul class="list-clean">
+                <li>Para qué sirve Excel en salud</li>
+                <li>Cómo se ve una tabla bien construida</li>
+                <li>Qué datos se pueden organizar</li>
+                <li>Cómo leer encabezados y registros</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Contenido de la tarde</h3>
+              <ul class="list-clean">
+                <li>Construcción de una tabla de signos vitales</li>
+                <li>Uso de IA para generar datos ficticios</li>
+                <li>Casos breves de refuerzo</li>
+                <li>Guardado y entrega formal de la evidencia</li>
+              </ul>
+            </div>
+          </div>
+          <div class="pill-row">
+            <span class="pill">Más práctica</span>
+            <span class="pill">Más casuística</span>
+            <span class="pill">Más datos ficticios</span>
+            <span class="pill">Menos teoría suelta</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">Sentido de la herramienta</div>
+          <h2>¿Para qué sirve Excel en un contexto de salud?</h2>
+          <div class="grid-4">
+            <div class="card"><h3>Registrar</h3><p>Permite escribir datos de forma ordenada y mantener un control claro de la información.</p></div>
+            <div class="card"><h3>Organizar</h3><p>Ayuda a ubicar cada dato en su columna y cada caso en su fila, evitando mezcla o desorden.</p></div>
+            <div class="card"><h3>Presentar</h3><p>Una tabla clara facilita la lectura, la revisión y la comprensión de la información.</p></div>
+            <div class="card"><h3>Preparar</h3><p>Sirve como base para luego aplicar fórmulas, funciones y procesos más avanzados.</p></div>
+          </div>
+          <div class="callout">En esta etapa no trabajaremos todavía análisis complejos. Primero debemos aprender a construir tablas limpias, legibles y bien estructuradas.</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">Casuística 1</div>
+          <h2>Tabla mal hecha vs tabla bien construida</h2>
+          <div class="compare">
+            <div class="card bad">
+              <h3>Tabla mal hecha</h3>
+              <ul class="list-warn">
+                <li>No tiene encabezados claros.</li>
+                <li>Los datos están mezclados.</li>
+                <li>No distingue títulos, números y observaciones.</li>
+                <li>Las columnas quedan estrechas o confusas.</li>
+              </ul>
+            </div>
+            <div class="card good">
+              <h3>Tabla bien construida</h3>
+              <ul class="list-clean">
+                <li>Encabezados visibles y consistentes.</li>
+                <li>Cada dato ocupa un lugar específico.</li>
+                <li>Se lee rápidamente.</li>
+                <li>El formato ayuda a comprender la información.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="callout-warning">Error frecuente: escribir como si la hoja fuera un cuaderno corrido. En Excel o Sheets, la información debe organizarse por columnas y filas con lógica clara.</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">Qué datos se pueden organizar</div>
+          <h2>Ejemplos reales de tablas útiles en formación en salud</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Información de personas</h3>
+              <ul class="list-clean">
+                <li>Nombre</li>
+                <li>Edad</li>
+                <li>Documento o código</li>
+                <li>Estado de atención</li>
+                <li>Observación</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Información técnica</h3>
+              <ul class="list-clean">
+                <li>Temperatura</li>
+                <li>Presión arterial</li>
+                <li>Pulso</li>
+                <li>Frecuencia respiratoria</li>
+                <li>Fecha de revisión</li>
+              </ul>
+            </div>
+          </div>
+          <div class="pill-row">
+            <span class="pill">Pacientes ficticios</span>
+            <span class="pill">Asistencia a jornada</span>
+            <span class="pill">Inventario de insumos</span>
+            <span class="pill">Control de práctica</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">Caso principal</div>
+          <h2>Registro de signos vitales de pacientes ficticios</h2>
+          <div class="case">
+            <div class="label">Situación</div>
+            <p>En una práctica académica, el grupo debe organizar la información básica de varios pacientes ficticios para registrar signos vitales de forma clara. El objetivo no es diagnosticar, sino aprender a estructurar bien los datos en una tabla.</p>
+          </div>
+          <div class="grid-3" style="margin-top:18px;">
+            <div class="card"><h3>Columnas sugeridas</h3><p>Paciente, Edad, Temperatura, Presión arterial, Pulso, Observación.</p></div>
+            <div class="card"><h3>Aprendizaje técnico</h3><p>Uso de encabezados, escritura ordenada, lectura de filas y columnas, ajuste de ancho y formato básico.</p></div>
+            <div class="card"><h3>Propósito pedagógico</h3><p>Convertir el uso de Excel en una práctica útil y comprensible, conectada con el área de formación.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">Modelo visual</div>
+          <h2>Así puede verse la tabla del caso principal</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Paciente</th>
+                  <th>Edad</th>
+                  <th>Temperatura</th>
+                  <th>Presión arterial</th>
+                  <th>Pulso</th>
+                  <th>Observación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Ana López</td><td>25</td><td>36.7</td><td>110/70</td><td>76</td><td>Estable</td></tr>
+                <tr><td>Juan Pérez</td><td>42</td><td>37.2</td><td>120/80</td><td>81</td><td>Control general</td></tr>
+                <tr><td>Laura Gómez</td><td>31</td><td>38.0</td><td>118/76</td><td>89</td><td>Fiebre leve</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">Observa que cada tipo de dato tiene su lugar. Esa es la idea que debemos dominar hoy: una columna por tipo de información y una fila por cada registro.</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">Paso a paso</div>
+          <h2>Cómo construir la tabla correctamente</h2>
+          <div class="timeline">
+            <div class="timeline-item"><strong>Paso 1</strong><div>Escribir un encabezado claro para cada tipo de dato que se va a registrar.</div></div>
+            <div class="timeline-item"><strong>Paso 2</strong><div>Ingresar los datos respetando el orden de columnas y filas.</div></div>
+            <div class="timeline-item"><strong>Paso 3</strong><div>Aplicar formato básico: negrita en encabezados, bordes y ajuste de columnas.</div></div>
+            <div class="timeline-item"><strong>Paso 4</strong><div>Revisar que la tabla se lea con claridad y que no haya datos mezclados.</div></div>
+            <div class="timeline-item"><strong>Paso 5</strong><div>Guardar con el nombre correcto y ubicar el archivo en la carpeta Clase_03.</div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">Formato básico</div>
+          <h2>Qué debemos cuidar al presentar la tabla</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Elementos mínimos</h3>
+              <ul class="list-clean">
+                <li>Encabezados visibles</li>
+                <li>Negrita en títulos</li>
+                <li>Bordes en la tabla</li>
+                <li>Columnas con ancho suficiente</li>
+                <li>Información legible</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Errores a evitar</h3>
+              <ul class="list-warn">
+                <li>Juntar datos diferentes en la misma columna</li>
+                <li>Dejar columnas demasiado estrechas</li>
+                <li>Escribir observaciones incompletas o confusas</li>
+                <li>Olvidar el nombre correcto del archivo</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">IA como apoyo</div>
+          <h2>Prompt para generar datos ficticios del caso principal</h2>
+          <p class="lead">Usaremos la IA para generar ejemplos rápidos. Después el trabajo real será copiar, organizar y presentar esa información correctamente en la hoja de cálculo.</p>
+          <div class="code-box">Actúa como asistente educativo para una clase de Excel básico en el programa Auxiliar en Enfermería. Genera una tabla con 10 pacientes ficticios para practicar en Excel o Google Sheets. La tabla debe incluir estas columnas: Paciente, Edad, Temperatura, Presión arterial, Pulso y Observación. Usa datos sencillos, variados, realistas y fáciles de copiar. No uses información real ni diagnósticos complejos. Presenta la respuesta en formato de tabla.</div>
+          <div class="callout-warning">La IA da un ejemplo. El estudiante debe revisar, digitar o copiar con cuidado, dar formato y guardar el archivo de forma correcta.</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">Casuística 2</div>
+          <h2>Caso breve de refuerzo: jornada de vacunación ficticia</h2>
+          <div class="case">
+            <div class="label">Situación</div>
+            <p>Se necesita organizar el ingreso de personas a una jornada de vacunación simulada. La meta es registrar datos básicos de manera ordenada para saber quién llegó, a qué hora y en qué estado va el proceso.</p>
+          </div>
+          <div class="grid-3" style="margin-top:18px;">
+            <div class="card"><h3>Columnas sugeridas</h3><p>Nombre, Documento, Edad, Hora de llegada, Estado de atención, Observación.</p></div>
+            <div class="card"><h3>Qué se refuerza</h3><p>Orden de datos, consistencia en el diligenciamiento, lectura rápida de una tabla y control simple de registros.</p></div>
+            <div class="card"><h3>Uso sugerido</h3><p>Ejercicio breve para quienes terminan más rápido el caso principal o como práctica de consolidación.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">Casuística 3</div>
+          <h2>Caso breve de refuerzo: inventario simple de insumos</h2>
+          <div class="case">
+            <div class="label">Situación</div>
+            <p>En una sala de práctica o botiquín se necesita llevar un control sencillo de algunos insumos. No se busca todavía calcular nada, sino registrar de forma clara qué hay, cuántos elementos existen y cuál es su estado.</p>
+          </div>
+          <div class="grid-3" style="margin-top:18px;">
+            <div class="card"><h3>Columnas sugeridas</h3><p>Insumo, Cantidad, Estado, Fecha de revisión, Observación.</p></div>
+            <div class="card"><h3>Qué se refuerza</h3><p>Uso de encabezados, datos distintos por columna, y visualización ordenada de información no clínica.</p></div>
+            <div class="card"><h3>Valor didáctico</h3><p>Mostrar que la hoja de cálculo también sirve para recursos, materiales y control de inventario básico.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">Evidencia final</div>
+          <h2>Qué debe entregar el estudiante hoy</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Producto principal</h3>
+              <ul class="list-clean">
+                <li>Tabla del caso principal terminada</li>
+                <li>Encabezados claros y completos</li>
+                <li>Formato básico aplicado</li>
+                <li>Archivo ubicado en Clase_03</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Nombre sugerido del archivo</h3>
+              <div class="code-box">cl3_nombreapellido_registrobasico.xlsx</div>
+              <p style="margin-top:12px;">La entrega se realiza por el formulario oficial del módulo.</p>
+            </div>
+          </div>
+          <div class="callout">Si queda tiempo, los casos breves pueden desarrollarse como refuerzo o ampliación para los estudiantes que avancen más rápido.</div>
+        </div>
+      </article>
+
+      <article class="slide">
+        <div class="wrap">
+          <div class="eyebrow">Cierre pedagógico</div>
+          <h2>Lo que deja esta clase y lo que viene en la siguiente</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Lo aprendido hoy</h3>
+              <ul class="list-clean">
+                <li>Excel sirve para organizar información útil</li>
+                <li>Una tabla debe construirse con lógica clara</li>
+                <li>Los datos ficticios ayudan a practicar sin riesgo</li>
+                <li>El formato mejora la lectura y la presentación</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Puente hacia la Clase 4</h3>
+              <p>La próxima sesión aprovechará esta base para introducir operaciones, fórmulas y funciones básicas. Primero había que aprender a registrar bien; luego vendrá el momento de calcular y analizar con mayor intención.</p>
+            </div>
+          </div>
+          <div class="callout">Mensaje final: hoy no se trató solo de abrir Excel, sino de comenzar a usarlo con sentido dentro del área de salud.</div>
+          <p class="footer-note">Presentación lista para GitHub Pages. Navega con flechas del teclado, botones superiores o modo pantalla completa.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const slides=[...document.querySelectorAll('.slide')];
+    const prevBtn=document.getElementById('prevBtn');
+    const nextBtn=document.getElementById('nextBtn');
+    const fullscreenBtn=document.getElementById('fullscreenBtn');
+    const counter=document.getElementById('counter');
+    const progressFill=document.getElementById('progressFill');
+    const dots=document.getElementById('dots');
+    let current=0;
+    function createDots(){slides.forEach((_,i)=>{const dot=document.createElement('button');dot.className='dot';dot.setAttribute('aria-label',`Ir a la diapositiva ${i+1}`);dot.addEventListener('click',()=>goTo(i));dots.appendChild(dot);});}
+    function updateDots(){[...dots.children].forEach((dot,i)=>dot.classList.toggle('active',i===current));}
+    function updateUI(){slides.forEach((slide,i)=>slide.classList.toggle('active',i===current));counter.textContent=`${current+1} / ${slides.length}`;progressFill.style.width=`${((current+1)/slides.length)*100}%`;prevBtn.disabled=current===0;nextBtn.disabled=current===slides.length-1;updateDots();}
+    function goTo(index){current=Math.max(0,Math.min(index,slides.length-1));updateUI();}
+    function next(){goTo(current+1)} function prev(){goTo(current-1)}
+    prevBtn.addEventListener('click',prev); nextBtn.addEventListener('click',next);
+    document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')next(); if(e.key==='ArrowLeft')prev(); if(e.key.toLowerCase()==='f')toggleFullscreen();});
+    function toggleFullscreen(){const root=document.documentElement; if(!document.fullscreenElement){root.requestFullscreen?.();} else {document.exitFullscreen?.();}}
+    fullscreenBtn.addEventListener('click',toggleFullscreen);
+    createDots(); updateUI();
+  </script>
+</body>
+</html>
